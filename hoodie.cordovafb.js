@@ -143,21 +143,35 @@ Hoodie.extend(function (hoodie) {
       return defer.promise();
     },
 
+    api: function (url, permition) {
+      var defer = window.jQuery.Deferred();
+      defer.notify('api', arguments, false);
+      window.facebookConnectPlugin.api(url, permition, defer.resolve, defer.reject);
+      return defer.promise();
+    },
+
+    friends: function () {
+      var defer = window.jQuery.Deferred();
+      defer.notify('friends', arguments, false);
+
+      hoodie.cordovafb.api('me/friends', ['public_profile', 'user_friends'])
+        .then(defer.resolve)
+        .fail(defer.reject);
+
+      return defer.promise();
+    },
+
     getMe: function (task) {
       var defer = window.jQuery.Deferred();
       defer.notify('getMe', arguments, false);
 
-      window.facebookConnectPlugin.api(
-        'me',
-        ['public_profile', 'email'],
-        function (me) {
+      hoodie.cordovafb.api('me', ['public_profile', 'email'])
+        .then(function (me) {
           task.profile.facebook.me = me;
           defer.resolve(task);
-        },
-        function (err) {
-          defer.reject(err);
-        }
-      );
+        })
+        .fail(defer.reject);
+
       return defer.promise();
     },
 
