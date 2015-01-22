@@ -1,0 +1,24 @@
+{
+  "name": "hoodie-plugin-cordovafb",
+  "version": "0.1.0",
+  "description": "Cordova Facebook Hoodie plugin",
+  "keywords": [
+    "hoodie",
+    "plugin",
+    "cordovafb"
+  ],
+  "license": "MIT",
+  "main": "hoodie.cordovafb.js",
+  "ignore": [
+    "**/.*",
+    "karma.conf.js",
+    "node_modules",
+    "bower_components",
+    "test",
+    "package.json"
+  ],
+  "dependencies": {
+    "lodash": "~2.4.1",
+    "jquery": "~2.1.1"
+  }
+}
