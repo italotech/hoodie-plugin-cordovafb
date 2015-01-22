@@ -29,14 +29,19 @@ Hoodie.extend(function (hoodie) {
   })();
 
   hoodie.cordovafb = {
+    permitions: ['user_friends', 'email', 'public_profile'],
 
     logout: function () {
       var defer = window.jQuery.Deferred();
       defer.notify('logout', arguments, false);
-      window.facebookConnectPlugin.logout(
-        defer.resolve,
-        defer.reject
-      );
+      hoodie.account.signOut()
+        .then(function () {
+          window.facebookConnectPlugin.logout(
+            defer.resolve,
+            defer.reject
+          );
+        })
+        .fail(defer.reject);
       return defer.promise();
     },
 
@@ -51,9 +56,13 @@ Hoodie.extend(function (hoodie) {
     setProfile: function (task) {
       var defer = window.jQuery.Deferred();
       defer.notify('setProfile', arguments, false);
-      task.profile.facebook.fbAuth = task.fbAuth;
-      hoodie.profile.set(task.profile)
-        .then(defer.resolve)
+      hoodie.profile.get()
+        .then(function (_task) {
+            _task.profile.facebook.fbAuth = task.fbAuth;
+            hoodie.profile.set(task.profile)
+              .then(defer.resolve)
+              .fail(defer.reject);
+        })
         .fail(defer.reject);
       return defer.promise();
     },
@@ -146,7 +155,7 @@ Hoodie.extend(function (hoodie) {
     api: function (url, permition) {
       var defer = window.jQuery.Deferred();
       defer.notify('api', arguments, false);
-      window.facebookConnectPlugin.api(url, permition, defer.resolve, defer.reject);
+      window.facebookConnectPlugin.api(url, permition || hoodie.cordovafb.permitions, defer.resolve, defer.reject);
       return defer.promise();
     },
 
@@ -154,7 +163,7 @@ Hoodie.extend(function (hoodie) {
       var defer = window.jQuery.Deferred();
       defer.notify('friends', arguments, false);
 
-      hoodie.cordovafb.api('me/friends', ['public_profile', 'user_friends'])
+      hoodie.cordovafb.api('me/friends', hoodie.cordovafb.permitions)
         .then(defer.resolve)
         .fail(defer.reject);
 
@@ -165,7 +174,7 @@ Hoodie.extend(function (hoodie) {
       var defer = window.jQuery.Deferred();
       defer.notify('getMe', arguments, false);
 
-      hoodie.cordovafb.api('me', ['public_profile', 'email'])
+      hoodie.cordovafb.api('me', hoodie.cordovafb.permitions)
         .then(function (me) {
           task.profile.facebook.me = me;
           defer.resolve(task);
@@ -181,7 +190,7 @@ Hoodie.extend(function (hoodie) {
       hoodie.account.signUp(task.profile.facebook.me.email, task.profile.facebook.password)
         .then(function () {
           task.signUp = true;
-          hoodie.account.signIn(task.profile.facebook.me.email, task.profile.facebook.password, { moveData : true })
+          hoodie.account.signIn(task.profile.facebook.me.email, task.profile.facebook.password)
             .then(function () {
               defer.resolve(task);
             })
@@ -194,13 +203,31 @@ Hoodie.extend(function (hoodie) {
     getProfile: function (task) {
       var defer = window.jQuery.Deferred();
       defer.notify('getProfile', arguments, false);
+      function handleAnonymous() {
+        if (hoodie.account.hasAnonymousAccount()) {
+          hoodie.account.destroy()
+            .then(function () {
+              defer.resolve(task);
+            });
+        } else {
+          defer.resolve(task);
+        }
+      };
+
       hoodie.profile.get()
         .then(function (_task) {
           task.profile = _task.profile;
           defer.resolve(task);
         })
         .fail(function () {
-          defer.resolve(task);
+
+          hoodie.task('cordovafbgetprofilebyfacebookid').start(task)
+            .then(function (_task) {
+              task.profile = _task.profile;
+              handleAnonymous();
+            })
+            .fail(handleAnonymous);
+
         });
       return defer.promise();
     },
@@ -219,7 +246,7 @@ Hoodie.extend(function (hoodie) {
       var defer = window.jQuery.Deferred();
       defer.notify('fblogin', arguments, false);
       window.facebookConnectPlugin.login(
-        ['user_friends', 'email', 'public_profile'],
+        hoodie.cordovafb.permitions,
         function (fbAuth) {
           task.fbAuth = fbAuth;
           defer.resolve(task);
