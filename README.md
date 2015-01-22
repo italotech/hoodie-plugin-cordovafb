@@ -1,15 +1,15 @@
-hoodie-plugin-profile
-====================
+hoodie-plugin-cordovafb
+=======================
 
-[![Build Status](https://travis-ci.org/goappes/hoodie-plugin-profile.svg?branch=master)](https://travis-ci.org/goappes/hoodie-plugin-profile) [![Dependencies](https://david-dm.org/goappes/hoodie-plugin-profile.png)](https://david-dm.org/goappes/hoodie-plugin-profile) [![devDependency Status](https://david-dm.org/goappes/hoodie-plugin-profile/dev-status.svg)](https://david-dm.org/goappes/hoodie-plugin-profile#info=devDependencies)
+[![Build Status](https://travis-ci.org/goappes/hoodie-plugin-cordovafb.svg?branch=master)](https://travis-ci.org/goappes/hoodie-plugin-cordovafb) [![Dependencies](https://david-dm.org/goappes/hoodie-plugin-cordovafb.png)](https://david-dm.org/goappes/hoodie-plugin-cordovafb) [![devDependency Status](https://david-dm.org/goappes/hoodie-plugin-cordovafb/dev-status.svg)](https://david-dm.org/goappes/hoodie-plugin-cordovafb#info=devDependencies)
 
 ## Dependencies
 ```shell
-  hoodie install hoodie-plugin-profile
+  hoodie install hoodie-plugin-cordovafb
 ```
 for cordova/phonegap users
 ```shell
-  bower install hoodie-plugin-profile
+  bower install hoodie-plugin-cordovafb
 ```
 
 ## Setup client
@@ -20,12 +20,9 @@ for cordova/phonegap users
 
 ```html
   <script src="<bowerdir>/hoodie/dist/hoodie.js"></script>
-  <script src="<bowerdir>/hoodie-plugin-profile/hoodie.profile.js"></script>
+  <script src="<bowerdir>/hoodie-plugin-cordovafb/hoodie.cordovafb.js"></script>
 ```
 
 ## API
-### hoodie.profile.subscribe(hoodieId, type)
-### hoodie.profile.unsubscribe(hoodieId, type)
-### hoodie.profile.subscribers()
-### hoodie.profile.subscriptions()
+### hoodie.cordovafb.login()
 
