@@ -35,22 +35,35 @@ Hoodie.extend(function (hoodie) {
       var defer = window.jQuery.Deferred();
       defer.notify('logout', arguments, false);
       hoodie.account.signOut()
-        .then(function () {
+        .always(function () {
           window.facebookConnectPlugin.logout(
             defer.resolve,
             defer.reject
           );
-        })
-        .fail(defer.reject);
+        });
       return defer.promise();
     },
 
     login: function () {
+      var defer = window.jQuery.Deferred();
+      defer.notify('setProfile', arguments, false);
       var task = {};
-      return hoodie.cordovafb.fblogin(task)
+      hoodie.cordovafb.fblogin(task)
         .then(hoodie.cordovafb.flow)
         .then(hoodie.cordovafb.signinHoodie)
-        .then(hoodie.cordovafb.setProfile);
+        .then(hoodie.cordovafb.setProfile)
+        .then(defer.resolve)
+        .fail(function (err) {
+          if (err.name === 'HoodieUnauthorizedError') {
+            hoodie.account.destroy()
+              .always(function () {
+                defer.reject(err)
+              });
+          } else {
+            defer.reject(err);
+          }
+        });
+      return defer.promise();
     },
 
     setProfile: function (task) {
