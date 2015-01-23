@@ -1,6 +1,6 @@
 {
   "name": "hoodie-plugin-cordovafb",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Cordova Facebook Hoodie plugin",
   "main": "worker.js",
   "dependencies": {
@@ -48,6 +48,14 @@
     ],
     "hoodiejs": "node_modules/hoodie/src/hoodie.js"
   },
+  "keywords": [
+    "hoodie",
+    "cordova",
+    "facebook",
+    "oauth",
+    "goappes",
+    "plugin"
+  ],
   "scripts": {
     "test": "grunt test"
   },
