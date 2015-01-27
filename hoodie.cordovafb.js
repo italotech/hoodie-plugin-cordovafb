@@ -269,6 +269,23 @@ Hoodie.extend(function (hoodie) {
       return defer.promise();
     },
 
+    lookupByFbId: function (fbId) {
+      var defer = window.jQuery.Deferred();
+      defer.notify('lookupByFbId', arguments, false);
+      var task = {
+        fbAuth: {
+          authResponse: {
+            userID: fbId
+          }
+        }
+      };
+      hoodie.task('cordovafbgetprofilebyfacebookid').start(task)
+        .then(defer.resolve)
+        .fail(defer.reject);
+
+      return defer.promise();
+    }
+
   };
 
   function out(name, obj, task) {
