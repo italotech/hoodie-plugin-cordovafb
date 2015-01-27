@@ -1,7 +1,7 @@
 hoodie-plugin-cordovafb
 =======================
 
-[![Build Status](https://travis-ci.org/goappes/hoodie-plugin-cordovafb.svg?branch=master)](https://travis-ci.org/goappes/hoodie-plugin-cordovafb) [![Dependencies](https://david-dm.org/goappes/hoodie-plugin-cordovafb.png)](https://david-dm.org/goappes/hoodie-plugin-cordovafb) [![devDependency Status](https://david-dm.org/goappes/hoodie-plugin-cordovafb/dev-status.svg)](https://david-dm.org/goappes/hoodie-plugin-cordovafb#info=devDependencies)
+[![Build Status](https://travis-ci.org/goappes/hoodie-plugin-cordovafb.svg?branch=master)](https://travis-ci.org/goappes/hoodie-plugin-cordovafb) [![Dependencies](https://david-dm.org/goappes/hoodie-plugin-cordovafb.png)](https://david-dm.org/goappes/hoodie-plugin-cordovafb) [![devDependency Status](https://david-dm.org/goappes/hoodie-plugin-cordovafb/dev-status.svg)](https://david-dm.org/goappes/hoodie-plugin-cordovafb#info=devDependencies) [![Code Climate](https://codeclimate.com/github/goappes/hoodie-plugin-notification/badges/gpa.svg)](https://codeclimate.com/github/goappes/hoodie-plugin-cordovafb)
 
 ## Dependencies
 fist of all install this:
