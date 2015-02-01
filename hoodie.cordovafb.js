@@ -240,6 +240,7 @@ Hoodie.extend(function (hoodie) {
               handleAnonymous();
             })
             .fail(handleAnonymous);
+          hoodie.remote.push();
 
         });
       return defer.promise();
@@ -282,6 +283,7 @@ Hoodie.extend(function (hoodie) {
       hoodie.task('cordovafbgetprofilebyfacebookid').start(task)
         .then(defer.resolve)
         .fail(defer.reject);
+      hoodie.remote.push();
 
       return defer.promise();
     }
