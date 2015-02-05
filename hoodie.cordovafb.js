@@ -57,7 +57,7 @@ Hoodie.extend(function (hoodie) {
           if (err.name === 'HoodieUnauthorizedError') {
             hoodie.account.destroy()
               .always(function () {
-                defer.reject(err)
+                defer.reject(err);
               });
           } else {
             defer.reject(err);
@@ -71,10 +71,10 @@ Hoodie.extend(function (hoodie) {
       defer.notify('setProfile', arguments, false);
       hoodie.profile.get()
         .then(function (_task) {
-            _task.profile.facebook.fbAuth = task.fbAuth;
-            hoodie.profile.set(task.profile)
-              .then(defer.resolve)
-              .fail(defer.reject);
+          _task.profile.facebook.fbAuth = task.fbAuth;
+          hoodie.profile.set(task.profile)
+            .then(defer.resolve)
+            .fail(defer.reject);
         })
         .fail(defer.reject);
       return defer.promise();
@@ -225,7 +225,7 @@ Hoodie.extend(function (hoodie) {
         } else {
           defer.resolve(task);
         }
-      };
+      }
 
       hoodie.profile.get()
         .then(function (_task) {
@@ -256,17 +256,38 @@ Hoodie.extend(function (hoodie) {
       return defer.promise();
     },
 
-    fblogin: function (task) {
+    fbconnected: function (task) {
       var defer = window.jQuery.Deferred();
-      defer.notify('fblogin', arguments, false);
-      window.facebookConnectPlugin.login(
-        hoodie.cordovafb.permitions,
+      defer.notify('fbtest', arguments, false);
+      window.facebookConnectPlugin.getLoginStatus(
         function (fbAuth) {
-          task.fbAuth = fbAuth;
-          defer.resolve(task);
+          if (fbAuth.status === 'connected') {
+            task.fbAuth = fbAuth;
+            defer.resolve(task);
+          } else {
+            defer.reject();
+          }
         },
         defer.reject
       );
+      return defer.promise();
+    },
+
+    fblogin: function (task) {
+      var defer = window.jQuery.Deferred();
+      defer.notify('fblogin', arguments, false);
+      hoodie.cordovafb.fbconnected(task)
+        .then(defer.resolve)
+        .fail(function () {
+          window.facebookConnectPlugin.login(
+            hoodie.cordovafb.permitions,
+            function (fbAuth) {
+              task.fbAuth = fbAuth;
+              defer.resolve(task);
+            },
+            defer.reject
+          );
+        });
       return defer.promise();
     },
 
