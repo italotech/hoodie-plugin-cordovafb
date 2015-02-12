@@ -54,11 +54,11 @@ Hoodie.extend(function (hoodie) {
         .then(hoodie.cordovafb.setProfile)
         .then(defer.resolve)
         .fail(function (err) {
-          if (err.name === 'HoodieUnauthorizedError') {
-            hoodie.account.destroy()
-              .always(function () {
-                defer.reject(err);
-              });
+          if (err && err.name === 'HoodieUnauthorizedError') {
+            hoodie.cordovafb.logout()
+              .then(hoodie.cordovafb.login)
+              .then(defer.resolve)
+              .fail(defer.reject);
           } else {
             defer.reject(err);
           }
