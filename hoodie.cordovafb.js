@@ -29,7 +29,7 @@ Hoodie.extend(function (hoodie) {
   })();
 
   hoodie.cordovafb = {
-    permitions: ['user_friends', 'email', 'public_profile'],
+    permitions: ['user_friends', 'email', 'public_profile', 'user_birthday', 'user_location'],
 
     logout: function () {
       var defer = window.jQuery.Deferred();
