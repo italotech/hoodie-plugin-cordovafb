@@ -71,7 +71,7 @@ Hoodie.extend(function (hoodie) {
       defer.notify('setProfile', arguments, false);
       hoodie.profile.get()
         .then(function (_task) {
-          _task.profile.facebook.fbAuth = task.fbAuth;
+          task.profile.facebook.fbAuth = _task.fbAuth;
           hoodie.profile.set(task.profile)
             .then(defer.resolve)
             .fail(defer.reject);
@@ -220,6 +220,9 @@ Hoodie.extend(function (hoodie) {
         if (hoodie.account.hasAnonymousAccount()) {
           hoodie.account.destroy()
             .then(function () {
+              defer.resolve(task);
+            })
+            .fail(function () {
               defer.resolve(task);
             });
         } else {
