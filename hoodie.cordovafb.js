@@ -34,13 +34,15 @@ Hoodie.extend(function (hoodie) {
     logout: function () {
       var defer = window.jQuery.Deferred();
       defer.notify('logout', arguments, false);
-      hoodie.account.signOut()
-        .always(function () {
-          window.facebookConnectPlugin.logout(
-            defer.resolve,
-            defer.reject
-          );
-        });
+
+      function hoodieSignOut() {
+        return hoodie.account.signOut()
+          .then(defer.resolve)
+          .fail(defer.reject);
+      }
+
+      window.facebookConnectPlugin.logout(hoodieSignOut, hoodieSignOut);
+
       return defer.promise();
     },
 
@@ -162,6 +164,14 @@ Hoodie.extend(function (hoodie) {
       } catch (err) {
         defer.fail(defer.reject);
       }
+      return defer.promise();
+    },
+
+    publish: function (obj) {
+      var defer = window.jQuery.Deferred();
+      defer.notify('publish', arguments, false);
+      obj.method = 'feed';
+      window.facebookConnectPlugin.showDialog(obj, defer.resolve, defer.reject);
       return defer.promise();
     },
 
